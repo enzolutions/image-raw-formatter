@@ -9,7 +9,6 @@ namespace Drupal\image_raw_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use \InvalidArgumentException;
 
 /**
  * Plugin implementation of the 'image_raw_formatter' formatter.
