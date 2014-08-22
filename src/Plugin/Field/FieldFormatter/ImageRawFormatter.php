@@ -5,7 +5,7 @@
  * Contains \Drupal\image_raw_formatter\Plugin\Field\FieldFormatter\ImageRawFormatter.
  */
 
-namespace Drupal\image\Plugin\Field\FieldFormatter;
+namespace Drupal\image_raw_formatter\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
