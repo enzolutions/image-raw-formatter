@@ -11,7 +11,7 @@ use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
-use \InvalidArgumentException;
+use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatterBase;
 
 /**
  * Plugin implementation of the 'image_raw_formatter' formatter.
