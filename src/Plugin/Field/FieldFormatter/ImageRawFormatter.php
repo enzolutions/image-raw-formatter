@@ -24,8 +24,16 @@ use \InvalidArgumentException;
  *   }
  * )
  */
-class ImageRawFormatter extends ImageFormatterBase
-{
+class ImageRawFormatter extends ImageFormatterBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function defaultSettings() {
+    return array(
+      'image_style' => '',
+    ) + parent::defaultSettings();
+  }
 
   /**
    * {@inheritdoc}
