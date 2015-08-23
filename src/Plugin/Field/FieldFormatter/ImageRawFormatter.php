@@ -12,14 +12,11 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Utility\LinkGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Cache\Cache;
-use \InvalidArgumentException;
 
 /**
  * Plugin implementation of the 'image_raw_formatter' formatter.
@@ -58,26 +55,27 @@ class ImageRawFormatter extends ImageFormatterBase  implements ContainerFactoryP
     /**
      * Constructs an ImageFormatter object.
      *
-     * @param string $plugin_id
-     *   The plugin_id for the formatter.
-     * @param mixed $plugin_definition
-     *   The plugin implementation definition.
+     * @param string                                      $plugin_id
+     *                                                                          The plugin_id for the formatter.
+     * @param mixed                                       $plugin_definition
+     *                                                                          The plugin implementation definition.
      * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
-     *   The definition of the field to which the formatter is associated.
-     * @param array $settings
-     *   The formatter settings.
-     * @param string $label
-     *   The formatter label display setting.
-     * @param string $view_mode
-     *   The view mode.
-     * @param array $third_party_settings
-     *   Any third party settings settings.
-     * @param \Drupal\Core\Session\AccountInterface $current_user
-     *   The current user.
+     *                                                                          The definition of the field to which the formatter is associated.
+     * @param array                                       $settings
+     *                                                                          The formatter settings.
+     * @param string                                      $label
+     *                                                                          The formatter label display setting.
+     * @param string                                      $view_mode
+     *                                                                          The view mode.
+     * @param array                                       $third_party_settings
+     *                                                                          Any third party settings settings.
+     * @param \Drupal\Core\Session\AccountInterface       $current_user
+     *                                                                          The current user.
      * @param \Drupal\Core\Utility\LinkGeneratorInterface $link_generator
-     *   The link generator service.
+     *                                                                          The link generator service.
      */
-    public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, LinkGeneratorInterface $link_generator, EntityStorageInterface $image_style_storage) {
+    public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AccountInterface $current_user, LinkGeneratorInterface $link_generator, EntityStorageInterface $image_style_storage)
+    {
         parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
         $this->currentUser = $current_user;
         $this->linkGenerator = $link_generator;
@@ -87,7 +85,8 @@ class ImageRawFormatter extends ImageFormatterBase  implements ContainerFactoryP
     /**
      * {@inheritdoc}
      */
-    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition)
+    {
         return new static(
           $plugin_id,
           $plugin_definition,
@@ -105,20 +104,22 @@ class ImageRawFormatter extends ImageFormatterBase  implements ContainerFactoryP
     /**
      * {@inheritdoc}
      */
-    public static function defaultSettings() {
+    public static function defaultSettings()
+    {
         return array(
           'image_style' => '',
           'image_link' => '',
         ) + parent::defaultSettings();
     }
 
-    /**
+  /**
    * {@inheritdoc}
    */
-  public function settingsForm(array $form, FormStateInterface $form_state) {
-    $image_styles = image_style_options(FALSE);
+  public function settingsForm(array $form, FormStateInterface $form_state)
+  {
+      $image_styles = image_style_options(false);
 
-    $element['image_style'] = array(
+      $element['image_style'] = array(
       '#title' => t('Image style'),
       '#type' => 'select',
       '#default_value' => $this->getSetting('image_style'),
@@ -130,63 +131,64 @@ class ImageRawFormatter extends ImageFormatterBase  implements ContainerFactoryP
       ),
     );
 
-    return $element;
+      return $element;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function settingsSummary() {
-    $summary = array();
+  public function settingsSummary()
+  {
+      $summary = array();
 
-    $image_styles = image_style_options(FALSE);
+      $image_styles = image_style_options(false);
     // Unset possible 'No defined styles' option.
     unset($image_styles['']);
     // Styles could be lost because of enabled/disabled modules that defines
     // their styles in code.
     $image_style_setting = $this->getSetting('image_style');
-    if (isset($image_styles[$image_style_setting])) {
-      $summary[] = t('Image style: @style', array('@style' => $image_styles[$image_style_setting]));
-    }
-    else {
-      $summary[] = t('Original image');
-    }
+      if (isset($image_styles[$image_style_setting])) {
+          $summary[] = t('Image style: @style', array('@style' => $image_styles[$image_style_setting]));
+      } else {
+          $summary[] = t('Original image');
+      }
 
-    return $summary;
+      return $summary;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items) {
-    $elements = array();
+  public function viewElements(FieldItemListInterface $items)
+  {
+      $elements = array();
 
-    $image_style_setting = $this->getSetting('image_style');
+      $image_style_setting = $this->getSetting('image_style');
 
     // Determine if Image style is required.
-    $image_style = NULL;
-    if (!empty($image_style_setting)) {
-      $image_style = entity_load('image_style', $image_style_setting);
-    }
+    $image_style = null;
+      if (!empty($image_style_setting)) {
+          $image_style = entity_load('image_style', $image_style_setting);
+      }
 
-    foreach ($items as $delta => $item) {
-      if ($item->entity) {
-        $image_uri = $item->entity->getFileUri();
+      foreach ($items as $delta => $item) {
+          if ($item->entity) {
+              $image_uri = $item->entity->getFileUri();
 
         // Get image style URL
         if ($image_style) {
-          $image_uri = $this->imageStyleStorage->load($image_style->getName())->buildUrl($image_uri);
+            $image_uri = $this->imageStyleStorage->load($image_style->getName())->buildUrl($image_uri);
         } else {
-          // Get absolute path for original image
+            // Get absolute path for original image
           $image_uri = $item->entity->url();
         }
 
-        $elements[$delta] = array(
+              $elements[$delta] = array(
           '#markup' => $image_uri,
         );
+          }
       }
-    }
 
-    return $elements;
+      return $elements;
   }
 }
