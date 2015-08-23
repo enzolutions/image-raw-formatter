@@ -1,7 +1,7 @@
 Image Raw Field Formatter
 =====================
 
-Image Raw Formatter for Drupal 8. This formatter return URLs absolute of original images or image style if is configured. The default formatter for image doens't work for REST services because return HTML tags for images.
+Image Raw Formatter for Drupal 8. This formatter return URLs absolute of original images or image style if is configured. The default formatter for image doesn't work for REST services because return HTML tags for images.
 
 ### Install using Drupal Console project
 ```bash
