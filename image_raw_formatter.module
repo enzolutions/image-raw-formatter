@@ -2,32 +2,15 @@
 
 /**
  * @file
- * Contains image_raw_formatter.module
+ * Contains image_raw_formatter.module.
  */
 
 /**
  * Implements hook_help().
  */
-
-function image_raw_formatter_help($path, $arg)
-{
+function image_raw_formatter_help($path, $arg) {
   switch ($path) {
     case 'admin/help#image_raw_formatter':
-      $output = 'Image Raw formatter for Drupal 8';
-      return $output;
-    break;
+      return 'Image Raw formatter for Drupal 8';
   }
-}
-
-/**
- * Implements hook_theme().
- */
-function image_raw_formatter_theme()
-{
-  $theme['vimeo_player'] = [
-    'variables' => ['vids' => NULL],
-    'template' => 'vimeo_player'
-  ];
-
-  return $theme;
 }
