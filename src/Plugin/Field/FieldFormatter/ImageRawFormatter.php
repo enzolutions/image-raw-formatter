@@ -76,7 +76,7 @@ class ImageRawFormatter extends ImageFormatterBase {
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items) {
+  public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = array();
 
     $image_style_setting = $this->getSetting('image_style');
