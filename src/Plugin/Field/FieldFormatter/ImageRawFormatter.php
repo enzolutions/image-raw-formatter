@@ -156,8 +156,9 @@ class ImageRawFormatter extends ImageFormatterBase implements ContainerFactoryPl
   /**
    * {@inheritdoc}
    */
-  public function viewElements(FieldItemListInterface $items) {
+  public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = array();
+    $files = $this->getEntitiesToView($items, $langcode);
 
     $image_style_setting = $this->getSetting('image_style');
 
@@ -167,22 +168,22 @@ class ImageRawFormatter extends ImageFormatterBase implements ContainerFactoryPl
       $image_style = entity_load('image_style', $image_style_setting);
     }
 
-    foreach ($items as $delta => $item) {
-      if ($item->entity) {
-        $image_uri = $item->entity->getFileUri();
+    //foreach ($items as $delta => $item) {
+    foreach ($files as $delta => $file) {
+      $image_uri = $file->getFileUri();
+      $url = Url::fromUri(file_create_url($image_uri));
 
-        // Get image style URL.
-        if ($image_style) {
-          $image_uri = $this->imageStyleStorage->load($image_style->getName())->buildUrl($image_uri);
-        }
-        else {
-          // Get absolute path for original image.
-          $image_uri = $item->entity->url();
-        }
-        $elements[$delta] = array(
-          '#markup' => $image_uri,
-        );
+      if ($image_style) {
+        $image_uri = $this->imageStyleStorage->load($image_style->getName())->buildUrl($image_uri);
       }
+      else {
+        // Get absolute path for original image.
+        $image_uri = $url;
+      }
+
+      $elements[$delta] = array(
+          '#markup' => $image_uri,
+      );
     }
     return $elements;
   }
