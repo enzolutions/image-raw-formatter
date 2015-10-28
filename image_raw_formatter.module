@@ -5,6 +5,8 @@
  * Contains image_raw_formatter.module.
  */
 
+use Drupal\Core\Routing\RouteMatchInterface;
+
 /**
  * Implements hook_help().
  */
