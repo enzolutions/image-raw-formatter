@@ -78,6 +78,12 @@ class ImageRawFormatter extends ImageFormatterBase {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = array();
+    $files = $this->getEntitiesToView($items, $langcode);
+
+    // Early opt-out if the field is empty.
+    if (empty($files)) {
+      return $elements;
+    }
 
     $image_style_setting = $this->getSetting('image_style');
 
@@ -87,22 +93,20 @@ class ImageRawFormatter extends ImageFormatterBase {
       $image_style = entity_load('image_style', $image_style_setting);
     }
 
-    foreach ($items as $delta => $item) {
-      if ($item->entity) {
-        $image_uri = $item->entity->getFileUri();
+    foreach ($files as $delta => $file) {
+      $image_uri = $file->getFileUri();
 
-        // Get image style URL
-        if ($image_style) {
-          $image_uri = ImageStyle::load($image_style->getName())->buildUrl($image_uri);
-        } else {
-          // Get absolute path for original image
-          $image_uri = $item->entity->url();
-        }
-
-        $elements[$delta] = array(
-          '#markup' => $image_uri,
-        );
+      // Get image style URL
+      if ($image_style) {
+        $image_uri = ImageStyle::load($image_style->getName())->buildUrl($image_uri);
+      } else {
+        // Get absolute path for original image
+        $image_uri = $file->url();
       }
+
+      $elements[$delta] = array(
+        '#markup' => $image_uri,
+      );
     }
 
     return $elements;
