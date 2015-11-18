@@ -171,18 +171,17 @@ class ImageRawFormatter extends ImageFormatterBase implements ContainerFactoryPl
     //foreach ($items as $delta => $item) {
     foreach ($files as $delta => $file) {
       $image_uri = $file->getFileUri();
-      $url = Url::fromUri(file_create_url($image_uri));
 
       if ($image_style) {
-        $image_uri = $this->imageStyleStorage->load($image_style->getName())->buildUrl($image_uri);
+        $absolute_path = $this->imageStyleStorage->load($image_style->getName())->buildUrl($image_uri);
       }
       else {
         // Get absolute path for original image.
-        $image_uri = $url;
+        $absolute_path = Url::fromUri(file_create_url($image_uri))->getUri();
       }
 
       $elements[$delta] = array(
-          '#markup' => $image_uri,
+          '#markup' => $absolute_path,
       );
     }
     return $elements;
