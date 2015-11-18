@@ -1,6 +1,7 @@
 {
     "name": "drupal/image_raw_formatter",
     "description": "Image Raw Formatter for Drupal 8",
+    "type": "drupal-module",
     "authors": [
         {
             "name": "enzo - Eduardo Garcia",
